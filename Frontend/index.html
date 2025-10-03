@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Valuevault</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      #Logo {
+        height: 50px;
+        width: 50px;
+      }
+
+      #Search-bar {
+        font-family: "Helvetica Neue", Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .search-box {
+        display: flex;
+        align-items: center;
+        background: #fff;
+        border-radius: 30px;
+        padding: 10px 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: box-shadow 0.2s ease;
+        width: 320px;
+        border: solid black 1px;
+      }
+      .search-box:focus-within {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      }
+
+      .search-box input {
+        border: none;
+        outline: none;
+        font-size: 16px;
+        flex: 1;
+        background: transparent;
+      }
+      .search-box button {
+        border: none;
+        background: none;
+        cursor: pointer;
+        font-size: 18px;
+        color: #666;
+        transition: color 0.2s;
+      }
+      .card {
+        color: black;
+      }
+      .heading-custom {
+        color: #239B7;
+      }
+
+      .custom-header{
+        background-color: #2f2f2fff;
+      }
+      body {
+        background-color: blanchedlmond;
+      }
+      
+    </style>
+  </head>
+  <body>
+    <header
+      class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom custom-header"
+    >
+      <a
+        href="/"
+        class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+      >
+        <img id="Logo" src="./Source/LOGO.png" alt="" />
+        <span class="fs-4 text-light">Value Vault</span>
+      </a>
+      <ul class="nav nav-pills">
+        <li class="nav-item">
+          <a href="#" class="nav-link active" aria-current="page">Home</a>
+        </li>
+        <li class="nav-item"><a href="#" class="nav-link text-light">Features</a></li>
+        <li class="nav-item"><a href="#" class="nav-link text-light">FAQs</a></li>
+        <li class="nav-item"><a href="#" class="nav-link text-light">About</a></li>
+        <li class="nav-item"><a href="../register.html" class="nav-link text-light">Sign In</a></li>
+      </ul>
+    </header>
+
+    <div class="px-4 py-5 my-5 text-center" style="background-color: skyblue;">
+      <h1 class="display-5 fw-bold text-body-emphasis">Value Vault</h1>
+      <div class="col-lg-6 mx-auto">
+        <p class="lead mb-4">
+          ValueVault is your trusted companion in the world of online shopping.
+          We’re a smart price comparison platform designed to help you find the
+          best deals across hundreds of websites instantly, effortlessly, and
+          accurately. Unlock the best deal, every time.
+        </p>
+      </div>
+    </div>
+
+    
+
+    <div id="Search-bar">
+  <form class="search-box" onsubmit="return searchProduct(event)">
+    <input id="productInput" type="text" placeholder="Search..." />
+    <button type="submit">🔍</button>
+  </form>
+</div>
+
+<!-- Result section -->
+<div class="container mt-4">
+  <div id="result"></div>
+</div>
+
+<div id="results"></div>
+
+<script>
+async function searchProduct(event) {
+  event.preventDefault(); // prevent form reload
+
+  const productName = document.getElementById("productInput").value.trim();
+  const resultsDiv = document.getElementById("result");
+  resultsDiv.innerHTML = "Searching...";
+
+  if (!productName) return alert("Please enter a product name");
+
+  try {
+    const res = await fetch("/search", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ productName })
+    });
+
+    const products = await res.json();
+
+    if (!products.length) {
+      resultsDiv.innerHTML = "No products found.";
+      return;
+    }
+
+    resultsDiv.innerHTML = ""; // clear previous results
+    products.forEach(p => {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+        <strong>${p.title}</strong><br>
+        Price: ${p.price}<br>
+        <a href="${p.link}" target="_blank">View Product</a>
+      `;
+      resultsDiv.appendChild(div);
+    });
+  } catch (err) {
+    resultsDiv.innerHTML = "Error fetching products.";
+    console.error(err);
+  }
+
+  return false; // prevent default form submission
+}
+</script>
+
+
+
+
+
+    <div class="container px-4 py-5" id="custom-cards">
+      <h2 class="pb-2 border-bottom">Why us?</h2>
+      <div class="row row-cols-1 row-cols-lg-3 align-items-stretch g-4 py-5">
+        <div class="col">
+          <div
+            class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+            style="background-image: url('assests/furniture.jpg');  background-size: cover;" 
+           
+          >
+            <div
+              class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1"
+            >
+              <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold heading-custom " style="font-size: 30px; 
+              margin-top: 100PX;"  >
+                Saves Time & Money
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div
+            class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+            style="background-image: url('assests/electro.jpg');  background-size: cover;"
+          >
+            <div
+              class="d-flex flex-column h-100 p-5 pb-3 text-white text-shadow-1"
+            >
+              <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold heading-custom text-white">
+                Designed for clarity and ease of use.
+              </h3>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <div
+            class="card card-cover h-100 overflow-hidden text-bg-dark rounded-4 shadow-lg"
+            style="background-image: url('assests/clothing.jpg');  background-size: cover; "
+          >
+            <div class="d-flex flex-column h-100 p-5 pb-3 text-shadow-1">
+              <h3 class="pt-5 mt-5 mb-4 display-6 lh-1 fw-bold heading-custom">
+                We listen to feedback and evolve with our users.
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <footer
+        class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top"
+      >
+        <div class="col-md-4 d-flex align-items-center">
+          <a
+            href="/"
+            class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1"
+            aria-label="Bootstrap"
+          >
+            <svg class="bi" width="30" height="24" aria-hidden="true">
+              <use xlink:href="#bootstrap"></use>
+            </svg>
+          </a>
+          <span class="mb-3 mb-md-0 text-body-secondary"
+            >© 2025 Value Vault, Inc</span
+          >
+        </div>
+        <ul class="nav col-md-4 justify-content-end list-unstyled d-flex">
+          <li class="ms-3">
+            <a class="text-body-secondary" href="#" aria-label="Instagram">
+                <img src="./Source/instagram.svg" alt="insta icon">
+            </a>
+          </li>
+          <li class="ms-3">
+            <a class="text-body-secondary" href="#" aria-label="Facebook">
+                <img src="./Source/facebook.svg" alt="FB icon">
+            </a>
+                
+          </li>
+        </ul>
+      </footer>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
